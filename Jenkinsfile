@@ -15,10 +15,10 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install --upgrade pip
+                bat '''
+                python -m venv venv
+                venv\\Scripts\\activate
+                python -m pip install --upgrade pip
                 pip install -r requirements.txt
                 '''
             }
@@ -26,8 +26,8 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh '''
-                . venv/bin/activate
+                bat '''
+                venv\\Scripts\\activate
                 pytest
                 '''
             }
@@ -36,8 +36,8 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarCloud') {
-                    sh '''
-                    . venv/bin/activate
+                    bat '''
+                    venv\\Scripts\\activate
                     sonar-scanner
                     '''
                 }
@@ -46,11 +46,11 @@ pipeline {
 
         stage('Deploy (Mock)') {
             steps {
-                sh '''
-                echo "Starting deployment..."
-                echo "Deploying commit: $GIT_COMMIT"
-                echo "Deploying to demo environment"
-                echo "Deployment successful"
+                bat '''
+                echo Starting deployment...
+                echo Deploying commit %GIT_COMMIT%
+                echo Deploying to demo environment
+                echo Deployment successful
                 '''
             }
         }
